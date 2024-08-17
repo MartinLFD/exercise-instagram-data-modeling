@@ -8,65 +8,40 @@ from eralchemy2 import render_er
 Base = declarative_base()
 
 class Follower(Base):
-    __tablename__ = 'Follower' #añadir llaves foráneas o primarias 
-    ID = Column(Integer, primary_key=True)
-    user_from_id = Column(Integer, ForeignKey('u.from.id'))
-    user_to_id = Column(Integer, ForeignKey('u.to.id'))
-    
-
-
-
-
+    __tablename__ = 'follower'  
+    id = Column(Integer, primary_key=True)
+    user_from_id = Column(Integer, ForeignKey('user.id'))
+    user_to_id = Column(Integer, ForeignKey('user.id'))
 
 class User(Base):
-    __tablename__ = 'User'
-    ID = Column(Integer, primary_key=True)
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
     username = Column(String(60), nullable=False, unique=True )
     first_name = Column(String(80), nullable=False )
     last_name = Column(String(80), nullable=False )
     email = Column(String(100), nullable=False, unique=True )
-    
-
-
-
-
-
-
+    comment = relationship("Comment")
+    post = relationship("Post")
+    follower = relationship("Follower")
 
 class Comment(Base):
-    __tablename__ = 'Comment'
-    ID = Column(Integer, primary_key=True)
+    __tablename__ = 'comment'
+    id = Column(Integer, primary_key=True)
     comment_text = Column(String(250), nullable=False )
-    author_id = Column(Integer, ForeignKey('author.id'))
+    author_id = Column(Integer, ForeignKey('user.id'))
     post_id = Column(Integer, ForeignKey('post.id'))
-
-
-
-
-
 
 class Post(Base):
-    __tablename__ = 'Post'
-    ID = Column(Integer, primary_key=True)
+    __tablename__ = 'post'
+    id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-
-
-
-
+    media = relationship("Media")
 
 class Media(Base):
-    __tablename__ = 'Media'
-    ID = Column(Integer, primary_key=True)
-    
+    __tablename__ = 'media'
+    id = Column(Integer, primary_key=True)
     url = Column(String(400), nullable= False)
     post_id = Column(Integer, ForeignKey('post.id'))
-
-
-
-
-    
-
-    
 
 ## Draw from SQLAlchemy base
 try:
